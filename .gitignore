@@ -1,0 +1,18 @@
+# uv
+.uv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environnement virtuel
+.venv/
+venv/
+env/
+
+# Autres fichiers courants à ignorer
+*.log
+*.egg-info/
+dist/
+build/
