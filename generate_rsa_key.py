@@ -71,7 +71,7 @@ class RsaKeyGeneration:
         Args:
             rsa_key (RsaKey): The RSA key from wich to extract the public key
         """
-        with open(f"{self.nom}_rsa_public_key.pem", "wb") as f:
+        with open(f"{self.nom}_rsa_pubkey.pem", "wb") as f:
             public_rsa_key = rsa_key.public_key().export_key()
             f.write(public_rsa_key)
 
@@ -83,7 +83,7 @@ class RsaKeyGeneration:
             rsa_key (RsaKey): The RSA key containing the private component
         """
 
-        with open(f"{self.nom}rsa_private_key.pem", "wb") as f:
+        with open(f"{self.nom}_rsa_privkey.pem", "wb") as f:
 
             private_rsa_key = rsa_key.export_key(
                 passphrase=self.passphrase,
@@ -107,5 +107,5 @@ class RsaKeyGeneration:
 
 
 if __name__ == "__main__":
-    text_encrypt_rsa_key = RsaKeyGeneration("encrypt_text", 2048)
-    signature_encrypt_rsa_key = RsaKeyGeneration("encrypt_signature", 2048)
+    text_encrypt_rsa_key = RsaKeyGeneration("aes_iv", 2048)
+    signature_encrypt_rsa_key = RsaKeyGeneration("signature", 2048)
