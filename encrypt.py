@@ -12,25 +12,6 @@ from Crypto.PublicKey.RSA import RsaKey
 from Crypto.Random import get_random_bytes
 from Crypto.Signature import pss
 
-
-def start_end_function(func):
-    """
-    Decorator that logs the start and the end of a function execution,
-    and prints the function's returned result.
-    """
-
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        print(f"----------Start {func.__name__}----------")
-        result = func(*args, **kwargs)
-        pprint(result)
-        print(f"----------End {func.__name__}------------")
-        return result
-
-    return wrapper
-
-
-@start_end_function
 def generate_aeskey_iv(
     aes_length: int = 32, iv_length: int = 12
 ) -> tuple[bytes, bytes]:
@@ -48,8 +29,6 @@ def generate_aeskey_iv(
     iv = get_random_bytes(iv_length)
     return aes_key, iv
 
-
-@start_end_function
 def load_data_from_file(pathfile: Path) -> bytes | str:
     """
     Loads content from a file
@@ -65,8 +44,6 @@ def load_data_from_file(pathfile: Path) -> bytes | str:
     else:
         return pathfile.read_text()
 
-
-@start_end_function
 def aes_encrypt(
     plaintext: str,
     aes_key: bytes,
@@ -94,8 +71,6 @@ def aes_encrypt(
 
     return ciphertext
 
-
-@start_end_function
 def rsa_encrypt(
     var_to_encrypt: bytes,
     rsa_pubkey: RsaKey,
@@ -115,7 +90,6 @@ def rsa_encrypt(
     return var_encrypted
 
 
-@start_end_function
 def hash_variable(var) -> bytes:
     """
     Computes SHA-256 hash of a variable.
@@ -131,7 +105,6 @@ def hash_variable(var) -> bytes:
     return var_hash
 
 
-@start_end_function
 def ciphertext_signature(
     rsa_privkey: RsaKey,
     hash: SHA256Hash,
@@ -183,7 +156,7 @@ if __name__ == "__main__":
     #   AES 256-GCM Encryption
     ############################################
     # Find message to encrypt
-    plaintext_pathfile = Path("plaintext.txt")
+    plaintext_pathfile = Path("message.txt")
     plaintext = load_data_from_file(plaintext_pathfile)
 
     # Encrypt message
@@ -221,9 +194,9 @@ if __name__ == "__main__":
     # Find passphrase for rsa privkey
     rsa_privkey_passphrase_pathfile = Path("signature_rsa_privkey.key")
     passphrase = load_data_from_file(rsa_privkey_passphrase_pathfile)
-
     rsa_privkey = RSA.import_key(raw_rsa_privkey, passphrase)  # type: ignore[arg-type]
 
+    # Signature
     variables["signature"] = ciphertext_signature(rsa_privkey, hash_ciphertext)
 
     ############################################
@@ -250,4 +223,5 @@ if __name__ == "__main__":
     ############################################
     message_pathfile = Path("secure_message.json")
     save_message(variables, message_pathfile)
+    print("your message has been encrypted !")
     pprint(variables)
