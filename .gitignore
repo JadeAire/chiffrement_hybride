@@ -16,3 +16,6 @@ env/
 *.egg-info/
 dist/
 build/
+
+# Clé
+*.key
